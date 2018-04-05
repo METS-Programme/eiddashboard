@@ -38,6 +38,9 @@
     <script src="{{ asset('/js/nv.d3.min.js') }}"></script>
     <script src="{{ asset('/js/stream_layers.js') }}"></script>
 
+    <script src="{{ asset('/Highcharts/code/highcharts.js') }}"></script>
+    <script src="{{ asset('/Highcharts/code/modules/exporting.js') }}"></script>
+
     <style type="text/css">
     .nv-point {
         stroke-opacity: 1!important;
@@ -56,7 +59,7 @@
     <div class="container">
 
         <div class="navbar-header"> 
-            <a class="navbar-brand" href="/" style="font-weight:800px;color:#FFF"> UGANDA EID</a>
+            <a class="navbar-brand" href="/" style="font-weight:800px;color:#FFF">UGANDA EID</a>
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -214,7 +217,7 @@
                         <% cl.name %>
                     </option>
                 </select>
-            </td> 
+            </td>
 
              
         </tr>
@@ -264,13 +267,15 @@
         <div class="content-wrap">
             <section id="tab1">
                 <div class="row">
-                    <div class="col-lg-6">                        
-                        <div id="visual1" class="db-charts">
-                            <svg></svg>
-                        </div>                        
+                    <div class="col-lg-12">
+                        {{--<div id="visual1" class="db-charts">--}}
+                            {{--<svg></svg>--}}
+                        {{--</div>                        --}}
+                        <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
                     </div>
                    
-                    <div class="col-lg-6 facilties-sect facilties-sect-list1" >
+                    <div class="col-lg-12 facilties-sect facilties-sect-list1" >
                         <span class='dist_faclty_toggle sect1' ng-model="show_fclties1" ng-init="show_fclties1=false" ng-click="showF(1)">
                             <span class='active' id='d_shw1'>&nbsp;&nbsp;DISTRICTS&nbsp;&nbsp;</span>
                             <span id='f_shw1'>&nbsp;&nbsp;FACILITIES &nbsp;&nbsp;</span>
@@ -521,6 +526,7 @@
     </div>
     <br>
 </div>
+
 <script src=" {{ asset('js/cbpFWTabs.js') }} "></script>
 <script>
 (function() {
@@ -529,7 +535,82 @@
     });
 })();
 </script>
+<script type="text/javascript">
 
+    Highcharts.chart('container', {
+        chart: {
+            zoomType: 'xy'
+        },
+        title: {
+            text: 'Average Monthly Temperature and Rainfall in Tokyo'
+        },
+        subtitle: {
+            text: 'Source: WorldClimate.com'
+        },
+        xAxis: [{
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            crosshair: true
+        }],
+        yAxis: [{ // Primary yAxis
+            labels: {
+                format: '{value}°C',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
+            },
+            title: {
+                text: 'Temperature',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
+            }
+        }, { // Secondary yAxis
+            title: {
+                text: 'Rainfall',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            },
+            labels: {
+                format: '{value} mm',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            },
+            opposite: true
+        }],
+        tooltip: {
+            shared: true
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'left',
+            x: 120,
+            verticalAlign: 'top',
+            y: 100,
+            floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#ffffff'
+        },
+        series: [{
+            name: 'Rainfall',
+            type: 'column',
+            yAxis: 1,
+            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+            tooltip: {
+                valueSuffix: ' mm'
+            }
+
+        }, {
+            name: 'Temperature',
+            type: 'spline',
+            data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
+            tooltip: {
+                valueSuffix: '°C'
+            }
+        }]
+    });
+</script>
 
 </body>
 
